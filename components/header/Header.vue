@@ -1,31 +1,21 @@
 <template>
   <div class="section">
     <div class="header">
-      <div class="header__logo" v-html="logo"></div>
-      <div class="header__box">
-        <div
-          @click="$emit('toggleCartModal')"
-          class="header__button"
-          v-html="box"
-        ></div>
-        <div class="header__card-indicator" v-html="ellipse"></div>
-      </div>
+      <Icon iconName="logo" type="image" />
+      <Button class="header__button">
+        <Icon iconName="box" @click.native="$emit('toggleCartModal')" />
+        <Icon iconName="ellipse" class="header__card-indicator" />
+      </Button>
     </div>
   </div>
 </template>
 
 <script>
-import logo from '~/assets/images/Logo.svg?raw'
-import box from '~/assets/images/icons/Box.svg?raw'
-import ellipse from '~/assets/images/icons/Ellipse.svg?raw'
-
 export default {
-  data() {
-    return {
-      logo,
-      box,
-      ellipse,
-    }
+  methods: {
+    click() {
+      console.log('@@@')
+    },
   },
 }
 </script>
@@ -47,12 +37,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  &__logo {
-  }
-  &__box {
-    position: relative;
-  }
   &__button {
+    position: relative;
+    background-color: $white;
+    padding: 0;
+    border: none;
+    outline: none;
   }
   &__card-indicator {
     position: absolute;

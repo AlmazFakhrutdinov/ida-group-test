@@ -19,4 +19,17 @@ export const mutations = {
 
     state.productsList = [...state.productsList, productsListItem]
   },
+
+  removeProduct(state, [id, categoryId]) {
+    const productsList = state.productsList.filter((el) => {
+      if (el.id === id && el.category === categoryId) {
+      } else {
+        return el
+      }
+    })
+
+    localStorage.setItem('productsList', JSON.stringify(productsList))
+
+    state.productsList = productsList
+  },
 }

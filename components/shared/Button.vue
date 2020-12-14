@@ -1,45 +1,40 @@
 <template>
   <button class="btn">
     <slot></slot>
-    <div v-if="iconName" v-html="icon"></div>
   </button>
 </template>
 
 <script>
-export default {
-  props: {
-    iconName: {
-      type: String,
-      required: false,
-    },
-  },
-
-  data() {
-    return {
-      icon: '',
-    }
-  },
-
-  mounted() {
-    if (this.iconName) {
-      const capitalizedIconName = this.$options.$filters.capitalize(
-        this.iconName
-      )
-      this.icon = require(`~/assets/images/icons/${capitalizedIconName}.svg?raw`)
-      console.log(this.icon)
-    }
-  },
-}
+export default {}
 </script>
 
 <style lang="scss">
+@import '@/assets/styles/colors.scss';
+
 .btn {
-  background-color: white;
   padding: 0;
   border: none;
   outline: none;
+  background-color: $white;
+}
+
+.icon {
   &:hover {
     opacity: 0.9;
+  }
+}
+
+.main-btn {
+  height: 50px;
+  width: 100%;
+  background-color: $black;
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  &:hover {
+    background-color: $grey;
   }
 }
 </style>

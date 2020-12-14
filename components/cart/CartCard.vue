@@ -1,29 +1,36 @@
 <template>
   <div class="cart-card">
     <img class="cart-card__img" :src="imgUrl" alt="product" />
+
     <div class="cart-card__content">
       <p class="cart-card__name">{{ item.name | capitalize }}</p>
+
       <p class="cart-card__price">
         {{ item.price | spaceAfterEveryThirdCharacter }}&nbsp;Р
       </p>
+
       <div class="cart-card__rating">
-        <div
+        <Icon
+          iconName="star"
           :id="`cart-card-star-${idx}`"
           class="cart-card__star"
-          v-html="star"
-        ></div>
+        />
         <p class="cart-card__rating-number">{{ item.rating }}</p>
       </div>
     </div>
-    <Button class="cart-card__button"> </Button>
+
+    <Button class="cart-card__button btn">
+      <Icon
+        iconName="cart"
+        @click.native="
+          $emit('removeProductFromTheCart', item.id, item.category)
+        "
+      />
+    </Button>
   </div>
 </template>
 
 <script>
-import Button from '@/components/shared/Button'
-import cart from '~/assets/images/icons/Cart.svg?raw'
-import star from '~/assets/images/icons/Star.svg?raw'
-
 export default {
   props: {
     item: {
@@ -36,26 +43,22 @@ export default {
     },
   },
 
-  components: {
-    Button,
-  },
-
   data() {
-    return {
-      cart,
-      star,
-    }
+    return {}
   },
 
   mounted() {
-    const starIcon = document
-      .getElementById(`cart-card-star-${this.idx}`)
-      .getElementsByTagName('rect')[0]
+    setTimeout(() => {
+      const icon = document
+        .getElementById(`cart-card-star-${this.idx}`)
+        .getElementsByTagName('rect')[0]
 
-    const pers = this.item.rating * 2 * 10
-    const devat = 9.5
-    const result = 11.5 - devat * (pers / 100)
-    starIcon.style.y = result
+      const fillPersentage = this.item.rating * 2 * 10
+      const fillRange = 9.5
+
+      const result = 11.5 - fillRange * (fillPersentage / 100)
+      icon.style.y = result
+    })
   },
 
   computed: {
@@ -78,6 +81,8 @@ export default {
   padding: 12px 22px 12px 25px;
   box-sizing: border-box;
   height: 120px;
+  margin-bottom: 12px;
+  border-radius: 8px;
   &__img {
     height: 90px;
     width: 70px;
@@ -114,8 +119,11 @@ export default {
     color: $yellow;
   }
   &__button {
-    cursor: pointer;
     margin-left: auto;
+    background-color: $white;
+    padding: 0;
+    border: none;
+    outline: none;
     &:hover {
       path {
         fill: green;

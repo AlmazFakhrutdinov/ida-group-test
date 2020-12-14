@@ -2,11 +2,13 @@
   <div class="cart">
     <div class="cart__header">
       <h2 class="cart__title">Корзина</h2>
-      <div
-        @click="$emit('toggleCartModal')"
-        class="cart__close-button"
-        v-html="close"
-      ></div>
+      <Button class="btn">
+        <Icon
+          iconName="close"
+          @click.native="$emit('toggleCartModal')"
+          class="cart__close-button"
+        />
+      </Button>
     </div>
 
     <p v-if="isCartEmpty" class="cart__empty-cart-message">
@@ -21,25 +23,44 @@
         :key="product.id"
         :idx="productIdx"
         :item="product"
+        @removeProductFromTheCart="removeProductFromTheCart"
       />
 
       <p class="cart__text">Оформить заказ</p>
-      <input class="input" type="text" placeholder="Ваше имя" />
-      <input class="input" type="text" placeholder="Телефон" />
-      <input class="input" type="text" placeholder="Адрес" />
+
+      <Input
+        v-model="customerData.name"
+        class="cart__input"
+        type="text"
+        placeholder="Ваше имя"
+      />
+      <Input
+        v-model="customerData.phoneNumber"
+        class="cart__input"
+        data-format="+7** **"
+        data-mask="+7__ __"
+        type="text"
+        placeholder="Телефон"
+        mask="phone"
+      />
+      <Input
+        v-model="customerData.address"
+        class="cart__input"
+        type="text"
+        placeholder="Адрес"
+      />
     </div>
 
-    <button>
+    <Button class="cart__button main-btn">
       <span v-if="isCartEmpty">Перейти к выбору</span>
       <span v-else>Отправить</span>
-    </button>
+    </Button>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import CartCard from './CartCard'
-import close from '~/assets/images/icons/Close.svg?raw'
 
 export default {
   components: {
@@ -48,8 +69,13 @@ export default {
 
   data() {
     return {
-      close,
       isCartEmpty: false,
+      customerData: {
+        name: '',
+        phoneNumber: '',
+        address: '',
+      },
+      test: '',
     }
   },
 
@@ -62,7 +88,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('cart', ['setProductsList']),
+    ...mapMutations('cart', ['setProductsList', 'removeProduct']),
     initializeProductsList() {
       const productsList = JSON.parse(localStorage.getItem('productsList'))
 
@@ -73,6 +99,23 @@ export default {
 
       localStorage.setItem('productsList', JSON.stringify([]))
     },
+    removeProductFromTheCart(id, categoryId) {
+      this.removeProduct([id, categoryId])
+    },
+  },
+
+  watch: {
+    // test(value) {
+    //   document.querySelectorAll('[data-mask]').forEach(function (e) {
+    //     e.addEventListener('keyup', function () {
+    //       format(e)
+    //     })
+    //     e.addEventListener('keydown', function () {
+    //       format(e)
+    //     })
+    //     format(e)
+    //   })
+    // },
   },
 }
 </script>
@@ -90,7 +133,8 @@ export default {
   border-radius: 8px 0px 0px 8px;
   padding: 52px 48px 0 48px;
   width: 460px;
-  min-height: 100vh;
+  height: 100%;
+  overflow: auto;
   box-sizing: border-box;
   &__header {
     display: flex;
@@ -104,6 +148,12 @@ export default {
     color: $black;
   }
   &__close-button {
+  }
+  &__button {
+    margin-top: 24px;
+  }
+  &__input {
+    margin-bottom: 12px;
   }
   &__empty-cart-message {
     font-family: $ptsans;
@@ -123,24 +173,6 @@ export default {
     line-height: 23px;
     color: $grey;
     margin-bottom: 16px;
-  }
-}
-
-.input {
-  box-sizing: border-box;
-  height: 50px;
-  width: 100%;
-  background: $grey-extra-light;
-  border-radius: 8px;
-  outline: none;
-  border: none;
-  font-family: $ptsans;
-  font-size: 16px;
-  line-height: 21px;
-  color: $black;
-  padding: 14px 14px 15px 14px;
-  &::placeholder {
-    color: $grey-light;
   }
 }
 </style>

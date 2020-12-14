@@ -2,17 +2,15 @@
   <div class="card">
     <div class="card__body">
       <div class="card__rating">
-        <div class="card__star" :id="`card-star-${idx}`" v-html="star"></div>
+        <Icon class="card__star" iconName="star" :id="`card-star-${idx}`" />
         <p class="card__rating-number">{{ item.rating }}</p>
       </div>
       <img class="card__img" :src="imgUrl" alt="proudct photo" />
       <Button
-        @click="$emit('putTheProductInTheCart', item)"
+        @click.native="$emit('putTheProductInTheCart', item)"
         class="card__button"
-        iconSize="small"
       >
-        iconName="box"
-        <!-- <div class="card__button-icon" v-html="box"></div> -->
+        <Icon class="hovered" iconName="box-small" />
       </Button>
     </div>
     <p class="card__name">{{ item.name | capitalize }}</p>
@@ -23,16 +21,7 @@
 </template>
 
 <script>
-// import test from '@/components/test'
-import Button from '@/components/shared/Button'
-import star from '~/assets/images/icons/Star.svg?raw'
-import box from '~/assets/images/icons/Box.svg?raw'
 export default {
-  components: {
-    // test,
-    Button,
-  },
-
   props: {
     item: {
       type: Object,
@@ -43,26 +32,19 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      star,
-      box,
-      range: '9.5 = 100%  11.5 2',
-    }
-  },
 
   mounted() {
-    // FIXME
-    const starIcon = document
-      .getElementById(`card-star-${this.idx}`)
-      .getElementsByTagName('rect')[0]
-    const pers = this.item.rating * 2 * 10
-    const devat = 9.5
+    setTimeout(() => {
+      const icon = document
+        .getElementById(`card-star-${this.idx}`)
+        .getElementsByTagName('rect')[0]
 
-    const result = 11.5 - devat * (pers / 100)
-    // console.log(result)
-    // console.log(this)
-    starIcon.style.y = result
+      const fillPersentage = this.item.rating * 2 * 10
+      const fillRange = 9.5
+
+      const result = 11.5 - fillRange * (fillPersentage / 100)
+      icon.style.y = result
+    })
   },
 
   computed: {
@@ -117,18 +99,6 @@ export default {
     height: 13px;
     width: 12px;
   }
-  // &__button-icon {
-  //   height: 13px;
-  //   width: 12px;
-  //   svg {
-  //     height: 13px;
-  //     width: 12px;
-  //   }
-  //   path {
-  //     fill: $grey-light;
-  //   }
-  // }
-
   &__name {
     font-family: $ptsans;
     font-size: 14px;
